@@ -1,0 +1,20 @@
+services:
+  web:
+    image: oven/bun:1-alpine
+    working_dir: /app
+    environment:
+      - NODE_ENV=development
+      # Vite >= 6.1 appends this to allowedHosts so the preview origin is accepted
+      - __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    command: sh -c "bun install --frozen-lockfile && bun run dev"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
