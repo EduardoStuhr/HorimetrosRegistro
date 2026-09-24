@@ -141,7 +141,7 @@ export async function executarBateriaTestesQualidade(): Promise<TestResultItem[]
 
   // 3. Teste de Idempotência Estrita (R9)
   try {
-    const uuidTeste = 'test-idemp-' + Date.now();
+    const uuidTeste = crypto.randomUUID();
     const dados = {
       id: uuidTeste,
       frotaNumero: 16,

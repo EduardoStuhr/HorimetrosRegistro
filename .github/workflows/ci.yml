@@ -15,20 +15,19 @@ jobs:
       - name: Checkout do Código
         uses: actions/checkout@v4
 
-      - name: Configurar Node.js 20
-        uses: actions/setup-node@v4
+      - name: Configurar Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: 20
-          cache: 'npm'
+          bun-version: latest
 
       - name: Instalar Dependências
-        run: npm ci
+        run: bun install --frozen-lockfile
 
       - name: Executar Lint e Checagem de Tipos TypeScript
-        run: npm run lint
+        run: bun run lint
 
       - name: Executar Bateria de Testes de Qualidade (Unidade, Regras, Idempotência)
-        run: npx tsx -e "import('./src/services/tests').then(m => m.executarBateriaTestesQualidade()).then(res => { const falhas = res.filter(r => !r.passou); if (falhas.length > 0) { console.error('Falhas encontradas:', falhas); process.exit(1); } else { console.log('Todos os ' + res.length + ' testes passaram com sucesso!'); } })"
+        run: bunx tsx -e "import('./src/services/tests').then(m => m.executarBateriaTestesQualidade()).then(res => { const falhas = res.filter(r => !r.passou); if (falhas.length > 0) { console.error('Falhas encontradas:', falhas); process.exit(1); } else { console.log('Todos os ' + res.length + ' testes passaram com sucesso!'); } })"
 
       - name: Build do Projeto de Produção
-        run: npm run build
+        run: bun run build
