@@ -1,0 +1,15 @@
+# Caddyfile — Configuração de Proxy Reverso e HTTPS para TRANSJAP
+{
+    email suporte@transjap.com.br
+}
+
+horimetro.transjap.com.br {
+    encode gzip zstd
+    
+    # Encaminha todo tráfego para a API/Painel em Node.js
+    reverse_proxy api:3000 {
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+    }
+}
